@@ -14,13 +14,20 @@ const kaboomInstance = kaboom({
   background: [57, 133, 90]
 })
 
-loadFont('basic', 'fonts/basic.png', 8, 8, { chars: "abcdefghijklmnopqrstuvwxyz #1234567890.,()[]" })
+loadFont('basic', 'fonts/basic.png', 8, 8, { chars: "abcdefghijklmnopqrstuvwxyz #1234567890.,()[]:" })
 loadSprite("bean", "sprites/bean.png")
 
 onClick(() => kaboomInstance.addKaboom(mousePos()))
 onKeyRelease('=', () => (debug.paused = !debug.paused))
 
 debug.inspect = true
+
+const timer = add([
+  pos(width() / 2, 16),
+  text('01:23'),
+  color(WHITE),
+  kaboomInstance.origin('center')
+])
 
 const prompt = add([
   pos(width() / 2, height() - 16),
