@@ -11,7 +11,8 @@ const PROMPT_MAX = 8
 const MAGE_SPEED = 100
 const ATTACK_SPEED = 300
 const SLIME_SIZE = 16
-const SLIME_SPEED = 10
+const SLIME_SPEED = 100
+const CASTLE_SIZE = 56
 
 const kaboomInstance = kaboom({
   width: 224,
@@ -95,6 +96,17 @@ const walls = [
     solid()
   ])
 ]
+
+const castle = add([
+  pos(width() / 2, height()),
+  kaboomInstance.origin('bot'),
+  color(62, 55, 92),
+  z(-1),
+  rect(width(), CASTLE_SIZE),
+  area(),
+  health(3),
+  'castle'
+])
 
 const mage = add([
   rect(16, 16),
@@ -190,4 +202,11 @@ onKeyRelease('[', () => {
 
 onCollide('fireball', 'slime', (fireball, slime) => {
   destroy(slime)
+})
+
+onCollide('slime', 'castle', (slime, castle) => {
+  castle.hurt(1)
+  console.log(castle.hp())
+  // TODO: update UI
+  // TODO: update state on death
 })
