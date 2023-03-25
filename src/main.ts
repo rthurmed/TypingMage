@@ -10,6 +10,8 @@ const FONT_SIZE = 8
 const PROMPT_MAX = 8
 const MAGE_SPEED = 100
 const ATTACK_SPEED = 300
+const SLIME_SIZE = 16
+const SLIME_SPEED = 10
 
 const kaboomInstance = kaboom({
   width: 224,
@@ -116,7 +118,8 @@ const mage = add([
           width: 32
         }),
         move(UP, ATTACK_SPEED),
-        cleanup()
+        cleanup(),
+        'fireball'
       ])
     }
   }
@@ -168,3 +171,23 @@ onCharInput((char) => {
   }
 })
 
+const slime = () => [
+  pos(rand(SLIME_SIZE / 2, width() - SLIME_SIZE / 2), -SLIME_SIZE),
+  kaboomInstance.origin('bot'),
+  rect(SLIME_SIZE, SLIME_SIZE),
+  color(GREEN),
+  area(),
+  move(DOWN, SLIME_SPEED),
+  'slime',
+]
+
+// TODO: spawn logic
+onKeyRelease('[', () => {
+  add([
+    ...slime()
+  ])
+})
+
+onCollide('fireball', 'slime', (fireball, slime) => {
+  destroy(slime)
+})
