@@ -1,6 +1,11 @@
 import kaboom from "kaboom"
 import randomWords from 'random-words'
 
+// source: https://stackoverflow.com/questions/1431094/how-do-i-replace-a-character-at-a-particular-index-in-javascript
+const replaceAt = (string: string, index: number, replacement: string) => {
+  return string.substring(0, index) + replacement + string.substring(index + replacement.length)
+}
+
 const FONT_SIZE = 8
 const PROMPT_MAX = 8
 const MAGE_SPEED = 100
@@ -29,15 +34,36 @@ const timer = add([
   kaboomInstance.origin('center')
 ])
 
+const backPrompt = add([
+  pos(width() / 2, height() - 16),
+  text(''),
+  color(BLACK),
+  kaboomInstance.origin('center')
+])
+
 const prompt = add([
   pos(width() / 2, height() - 16),
   text(''),
   color(WHITE),
   kaboomInstance.origin('center'),
   {
+    currentChar: 0,
     reset () {
+      this.currentChar = 0
+
       const words = randomWords({ exactly: 1, maxLength: PROMPT_MAX })
-      this.text = words[0]
+      const text = words[0]
+
+      this.text = text
+      backPrompt.text = text
+    },
+    read (char: string): boolean {
+      if (this.text[this.currentChar] !== char) {
+        return false
+      }
+      this.text = replaceAt(this.text, this.currentChar, ' ')
+      this.currentChar += 1
+      return this.currentChar >= this.text.length
     }
   }
 ])
@@ -99,7 +125,11 @@ const toggleShooting = () => {
   mage.color = mage.shooting ? RED : WHITE
   prompt.color = mage.color
 
-  if (!mage.shooting) {
+  if (mage.shooting) {
+    // started shooting
+
+  } else {
+    // stopped shooting
     prompt.reset()
   }
 }
@@ -115,4 +145,15 @@ const cancelShooting = () => {
 
 onKeyPress('space', toggleShooting)
 onKeyPress('enter', toggleShooting)
+
+onCharInput((char) => {
+  if (!mage.shooting) {
+    return
+  }
+  const completed = prompt.read(char)
+  if (completed) {
+    toggleShooting()
+    // TODO: shoot fireball
+  }
+})
 
