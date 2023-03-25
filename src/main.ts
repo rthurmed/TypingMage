@@ -9,6 +9,7 @@ const replaceAt = (string: string, index: number, replacement: string) => {
 const FONT_SIZE = 8
 const PROMPT_MAX = 8
 const MAGE_SPEED = 100
+const ATTACK_SPEED = 300
 
 const kaboomInstance = kaboom({
   width: 224,
@@ -100,7 +101,22 @@ const mage = add([
   body(),
   gravity(0),
   {
-    shooting: false
+    shooting: false,
+    shoot () {
+      add([
+        pos(this.pos),
+        kaboomInstance.origin('center'),
+        circle(16),
+        color(RED),
+        area({
+          shape: "circle",
+          height: 32,
+          width: 32
+        }),
+        move(UP, ATTACK_SPEED),
+        cleanup()
+      ])
+    }
   }
 ])
 
@@ -145,6 +161,7 @@ const cancelShooting = () => {
 
 onKeyPress('space', toggleShooting)
 onKeyPress('enter', toggleShooting)
+// TODO: backspace to cancel only
 
 onCharInput((char) => {
   if (!mage.shooting) {
@@ -153,7 +170,7 @@ onCharInput((char) => {
   const completed = prompt.read(char)
   if (completed) {
     toggleShooting()
-    // TODO: shoot fireball
+    mage.shoot()
   }
 })
 
