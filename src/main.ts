@@ -41,6 +41,23 @@ onKeyPress('/', () => {
   prompt.reset()
 })
 
+const walls = [
+  add([
+    pos(0, 0),
+    rect(16, height()),
+    kaboomInstance.origin('topright'),
+    area(),
+    solid()
+  ]),
+  add([
+    pos(width(), 0),
+    rect(16, height()),
+    kaboomInstance.origin('topleft'),
+    area(),
+    solid()
+  ])
+]
+
 const mage = add([
   rect(16, 16),
   pos(width() / 2, height() - 32),
@@ -71,7 +88,7 @@ onKeyDown('right', moveMageRight)
 
 const toggleShooting = () => {
   mage.shooting = !mage.shooting
-  
+
   mage.color = mage.shooting ? RED : WHITE
   prompt.color = mage.color
 
