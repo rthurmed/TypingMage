@@ -20,6 +20,8 @@ const kaboomInstance = kaboom({
   background: [57, 133, 90]
 })
 
+focus()
+
 loadFont('basic', 'fonts/basic.png', 8, 8, { chars: "abcdefghijklmnopqrstuvwxyz #1234567890.,()[]:" })
 loadSprite("bean", "sprites/bean.png")
 
@@ -135,33 +137,25 @@ onKeyDown('.', moveMageRight)
 onKeyDown('left', moveMageLeft)
 onKeyDown('right', moveMageRight)
 
-const toggleShooting = () => {
-  mage.shooting = !mage.shooting
-
-  mage.color = mage.shooting ? RED : WHITE
+const startShooting = () => {
+  mage.shooting = true
+  mage.color = RED
   prompt.color = mage.color
-
-  if (mage.shooting) {
-    // started shooting
-
-  } else {
-    // stopped shooting
-    prompt.reset()
-  }
 }
 
-const cancelShooting = () => {
+const stopShooting = () => {
   if (!mage.shooting) {
     return
   }
   mage.shooting = false
   mage.color = WHITE
+  prompt.color = mage.color
   prompt.reset()
 }
 
-onKeyPress('space', toggleShooting)
-onKeyPress('enter', toggleShooting)
-// TODO: backspace to cancel only
+onKeyPress('space', startShooting)
+onKeyPress('enter', startShooting)
+onKeyPress('backspace', stopShooting)
 
 onCharInput((char) => {
   if (!mage.shooting) {
@@ -169,7 +163,7 @@ onCharInput((char) => {
   }
   const completed = prompt.read(char)
   if (completed) {
-    toggleShooting()
+    stopShooting()
     mage.shoot()
   }
 })
