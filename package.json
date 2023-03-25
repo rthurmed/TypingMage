@@ -1,0 +1,14 @@
+{
+	"name": "TooMuchSlime",
+	"scripts": {
+		"build": "esbuild --bundle src/main.js --outfile=www/main.js --minify",
+		"dev": "esbuild --bundle src/main.js --outfile=www/main.js --servedir=www",
+		"zip": "npm run build && mkdir -p dist && zip -r dist/game.zip www -x \"**/.DS_Store\""
+	},
+	"dependencies": {
+		"kaboom": "^3000.0.0-beta.3"
+	},
+	"devDependencies": {
+		"esbuild": "^0.17.13"
+	}
+}
