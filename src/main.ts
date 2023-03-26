@@ -35,7 +35,6 @@ loadSprite("background", "sprites/background.png")
 loadSprite("mage", "sprites/mage.png")
 loadSprite("slime", "sprites/slime.png")
 
-onKeyRelease('=', () => (debug.paused = !debug.paused))
 
 const background = [
   pos(-16, -16,),
@@ -67,6 +66,8 @@ scene('gameover', () => {
 
 scene('main', () => {
   add(background)
+
+  onKeyRelease('=', () => (debug.paused = !debug.paused))
 
   const healthMeter = add([
     pos(16, 16),
