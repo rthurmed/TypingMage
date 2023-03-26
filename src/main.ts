@@ -29,7 +29,6 @@ focus()
 loadFont('basic', 'fonts/basic.png', 8, 8, { chars: "abcdefghijklmnopqrstuvwxyz #1234567890.,()[]:" })
 loadSprite("bean", "sprites/bean.png")
 
-onClick(() => kaboomInstance.addKaboom(mousePos()))
 onKeyRelease('=', () => (debug.paused = !debug.paused))
 
 debug.inspect = true
