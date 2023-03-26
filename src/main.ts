@@ -272,7 +272,6 @@ scene('main', () => {
   
   loop(SLIME_TIME_TO_INCREASE_AMOUNT, () => {
     slimeSpawnDelay = slimeSpawnDelay * 0.95
-    console.log({ slimeSpawnDelay })
   })
   
   onCollide('fireball', 'slime', (fireball, slime) => {
