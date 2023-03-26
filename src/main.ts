@@ -11,9 +11,12 @@ const PROMPT_MAX = 8
 const MAGE_SPEED = 100
 const ATTACK_SPEED = 300
 const SLIME_SIZE = 16
-const SLIME_SPEED = 100
+const SLIME_SPEED = 20
+const SLIME_TIME_TO_INCREASE_AMOUNT = 20 // seconds
 const CASTLE_SIZE = 56
 const MAX_GAME_TIME = 60 * 4 // seconds
+const UI_Z = 200
+const LETTERS = 'abcdefghijklmnopqrstuvwxyz'
 
 const kaboomInstance = kaboom({
   width: 224,
@@ -21,7 +24,7 @@ const kaboomInstance = kaboom({
   crisp: true,
   scale: 3,
   font: 'basic',
-  background: [57, 133, 90]
+  background: [55, 37, 56]
 })
 
 focus()
@@ -35,6 +38,7 @@ debug.inspect = true
 
 const timer = add([
   pos(width() / 2, 16),
+  z(UI_Z),
   text('01:23'),
   color(WHITE),
   kaboomInstance.origin('center'),
@@ -103,14 +107,16 @@ const walls = [
     rect(16, height()),
     kaboomInstance.origin('topright'),
     area(),
-    solid()
+    solid(),
+    opacity(0),
   ]),
   add([
     pos(width(), 0),
     rect(16, height()),
     kaboomInstance.origin('topleft'),
     area(),
-    solid()
+    solid(),
+    opacity(0),
   ])
 ]
 
@@ -190,8 +196,11 @@ onKeyPress('enter', startShooting)
 onKeyPress('backspace', stopShooting)
 
 onCharInput((char) => {
-  if (!mage.shooting) {
+  if (LETTERS.indexOf(char) < 0) {
     return
+  }
+  if (!mage.shooting) {
+    startShooting()
   }
   const completed = prompt.read(char)
   if (completed) {
@@ -217,6 +226,22 @@ onKeyRelease('[', () => {
   ])
 })
 
+let slimeSpawnDelay = 4
+
+const spawnSlime = () => {
+  add([
+    ...slime()
+  ])
+  wait(slimeSpawnDelay, spawnSlime)
+}
+
+spawnSlime()
+
+loop(SLIME_TIME_TO_INCREASE_AMOUNT, () => {
+  slimeSpawnDelay = slimeSpawnDelay * 0.85
+  console.log({ slimeSpawnDelay })
+})
+
 onCollide('fireball', 'slime', (fireball, slime) => {
   destroy(slime)
 })
@@ -224,6 +249,8 @@ onCollide('fireball', 'slime', (fireball, slime) => {
 onCollide('slime', 'castle', (slime, castle) => {
   castle.hurt(1)
   console.log(castle.hp())
+  shake(10)
+  destroy(slime)
   // TODO: update UI
   // TODO: update state on death
 })
