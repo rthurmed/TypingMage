@@ -219,13 +219,6 @@ const slime = () => [
   'slime',
 ]
 
-// TODO: spawn logic
-onKeyRelease('[', () => {
-  add([
-    ...slime()
-  ])
-})
-
 let slimeSpawnDelay = 4
 
 const spawnSlime = () => {
