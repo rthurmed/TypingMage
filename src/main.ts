@@ -35,6 +35,7 @@ loadSprite("bean", "sprites/bean.png")
 loadSprite("background", "sprites/background.png")
 loadSprite("mage", "sprites/mage.png")
 loadSprite("slime", "sprites/slime.png")
+loadSprite("fireball", "sprites/fireball.png")
 
 loadSound("castle", "sounds/castle.ogg")
 loadSound("explosion", "sounds/explosion.ogg")
@@ -195,13 +196,12 @@ scene('main', () => {
         add([
           pos(this.pos),
           kaboomInstance.origin('center'),
-          circle(16),
-          color(255, 191, 54),
-          outline(2, Color.fromArray([196, 77, 41])),
+          sprite('fireball'),
           area({
             shape: "circle",
             height: 32,
-            width: 32
+            width: 32,
+            offset: vec2(0, -6)
           }),
           move(UP, ATTACK_SPEED),
           cleanup(),
