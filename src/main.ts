@@ -30,11 +30,18 @@ const kaboomInstance = kaboom({
 focus()
 
 loadFont('basic', 'fonts/basic.png', 8, 8, { chars: "abcdefghijklmnopqrstuvwxyz #1234567890.,()[]:;" })
+
 loadSprite("bean", "sprites/bean.png")
 loadSprite("background", "sprites/background.png")
 loadSprite("mage", "sprites/mage.png")
 loadSprite("slime", "sprites/slime.png")
 
+loadSound("castle", "sounds/castle.ogg")
+loadSound("explosion", "sounds/explosion.ogg")
+loadSound("miss", "sounds/miss.ogg")
+loadSound("right", "sounds/right.ogg")
+loadSound("shoot", "sounds/shoot.ogg")
+loadSound("slime", "sounds/slime.ogg")
 
 const background = [
   pos(-16, -16,),
@@ -119,8 +126,10 @@ scene('main', () => {
       },
       read (char: string): boolean {
         if (this.text[this.currentChar] !== char) {
+          play('miss')
           return false
         }
+        // play('right')
         this.text = replaceAt(this.text, this.currentChar, ' ')
         this.currentChar += 1
         return this.currentChar >= this.text.length
@@ -182,6 +191,7 @@ scene('main', () => {
     {
       shooting: false,
       shoot () {
+        play('shoot')
         add([
           pos(this.pos),
           kaboomInstance.origin('center'),
@@ -277,10 +287,13 @@ scene('main', () => {
   
   onCollide('fireball', 'slime', (fireball, slime) => {
     destroy(slime)
+    play('slime')
   })
   
   onCollide('slime', 'castle', (slime, castle) => {
     castle.hurt(1)
+    play('castle')
+
     shake(10)
     destroy(slime)
     
