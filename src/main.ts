@@ -31,10 +31,19 @@ focus()
 
 loadFont('basic', 'fonts/basic.png', 8, 8, { chars: "abcdefghijklmnopqrstuvwxyz #1234567890.,()[]:" })
 loadSprite("bean", "sprites/bean.png")
+loadSprite("background", "sprites/background.png")
+loadSprite("mage", "sprites/mage.png")
+loadSprite("slime", "sprites/slime.png")
 
 onKeyRelease('=', () => (debug.paused = !debug.paused))
 
 debug.inspect = true
+
+const background = add([
+  pos(-16, -16,),
+  sprite('background'),
+  z(-2)
+])
 
 const timer = add([
   pos(width() / 2, 16),
@@ -64,7 +73,7 @@ loop(1 ,() => {
 const backPrompt = add([
   pos(width() / 2, height() - 16),
   text(''),
-  color(BLACK),
+  color(GREEN),
   kaboomInstance.origin('center')
 ])
 
@@ -123,7 +132,7 @@ const walls = [
 const castle = add([
   pos(width() / 2, height() - CASTLE_SIZE),
   kaboomInstance.origin('top'),
-  color(62, 55, 92),
+  opacity(0),
   z(-1),
   rect(width(), height()),
   area(),
@@ -132,11 +141,13 @@ const castle = add([
 ])
 
 const mage = add([
-  rect(16, 16),
+  sprite('mage'),
   pos(width() / 2, height() - 32),
   kaboomInstance.origin('bot'),
-  color(WHITE),
-  area(),
+  area({
+    height: 16,
+    width: 16
+  }),
   body(),
   gravity(0),
   {
@@ -146,7 +157,8 @@ const mage = add([
         pos(this.pos),
         kaboomInstance.origin('center'),
         circle(16),
-        color(RED),
+        color(255, 191, 54),
+        outline(2, Color.fromArray([196, 77, 41])),
         area({
           shape: "circle",
           height: 32,
@@ -177,8 +189,7 @@ onKeyDown('right', moveMageRight)
 
 const startShooting = () => {
   mage.shooting = true
-  mage.color = RED
-  prompt.color = mage.color
+  prompt.color = RED
 }
 
 const stopShooting = () => {
@@ -186,8 +197,7 @@ const stopShooting = () => {
     return
   }
   mage.shooting = false
-  mage.color = WHITE
-  prompt.color = mage.color
+  prompt.color = WHITE
   prompt.reset()
 }
 
@@ -210,11 +220,13 @@ onCharInput((char) => {
 })
 
 const slime = () => [
+  sprite('slime'),
   pos(rand(SLIME_SIZE / 2, width() - SLIME_SIZE / 2), -SLIME_SIZE),
   kaboomInstance.origin('bot'),
-  rect(SLIME_SIZE, SLIME_SIZE),
-  color(GREEN),
-  area(),
+  area({
+    height: 16,
+    width: 16
+  }),
   move(DOWN, SLIME_SPEED),
   'slime',
 ]
