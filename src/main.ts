@@ -29,7 +29,7 @@ const kaboomInstance = kaboom({
 
 focus()
 
-loadFont('basic', 'fonts/basic.png', 8, 8, { chars: "abcdefghijklmnopqrstuvwxyz #1234567890.,()[]:" })
+loadFont('basic', 'fonts/basic.png', 8, 8, { chars: "abcdefghijklmnopqrstuvwxyz #1234567890.,()[]:;" })
 loadSprite("bean", "sprites/bean.png")
 loadSprite("background", "sprites/background.png")
 loadSprite("mage", "sprites/mage.png")
@@ -67,6 +67,13 @@ scene('gameover', () => {
 
 scene('main', () => {
   add(background)
+
+  const healthMeter = add([
+    pos(16, 16),
+    z(UI_Z),
+    text(';;;;;;'),
+    color(WHITE)
+  ])
   
   const timer = add([
     pos(width() / 2, 16),
@@ -157,7 +164,7 @@ scene('main', () => {
     z(-1),
     rect(width(), height()),
     area(),
-    health(3),
+    health(6),
     'castle'
   ])
   
@@ -276,9 +283,11 @@ scene('main', () => {
     castle.hurt(1)
     shake(10)
     destroy(slime)
-    // TODO: update UI
+    
     if (castle.hp() <= 0) {
       go('gameover')
+    } else {
+      healthMeter.text = healthMeter.text.slice(0, -1)
     }
   })
 })
