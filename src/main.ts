@@ -77,7 +77,7 @@ scene('main', () => {
   onKeyRelease('=', () => (debug.paused = !debug.paused))
 
   const healthMeter = add([
-    pos(16, 16),
+    pos(4, height() - 12),
     z(UI_Z),
     text(';;;;;;'),
     color(WHITE)
