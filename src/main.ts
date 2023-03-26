@@ -121,11 +121,11 @@ const walls = [
 ]
 
 const castle = add([
-  pos(width() / 2, height()),
-  kaboomInstance.origin('bot'),
+  pos(width() / 2, height() - CASTLE_SIZE),
+  kaboomInstance.origin('top'),
   color(62, 55, 92),
   z(-1),
-  rect(width(), CASTLE_SIZE),
+  rect(width(), height()),
   area(),
   health(3),
   'castle'
@@ -219,7 +219,7 @@ const slime = () => [
   'slime',
 ]
 
-let slimeSpawnDelay = 4
+let slimeSpawnDelay = 3
 
 const spawnSlime = () => {
   add([
@@ -231,7 +231,7 @@ const spawnSlime = () => {
 spawnSlime()
 
 loop(SLIME_TIME_TO_INCREASE_AMOUNT, () => {
-  slimeSpawnDelay = slimeSpawnDelay * 0.85
+  slimeSpawnDelay = slimeSpawnDelay * 0.95
   console.log({ slimeSpawnDelay })
 })
 
