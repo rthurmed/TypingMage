@@ -13,6 +13,7 @@ const ATTACK_SPEED = 300
 const SLIME_SIZE = 16
 const SLIME_SPEED = 100
 const CASTLE_SIZE = 56
+const MAX_GAME_TIME = 60 * 4 // seconds
 
 const kaboomInstance = kaboom({
   width: 224,
@@ -37,8 +38,25 @@ const timer = add([
   pos(width() / 2, 16),
   text('01:23'),
   color(WHITE),
-  kaboomInstance.origin('center')
+  kaboomInstance.origin('center'),
+  {
+    time: 0,
+    update () {
+      const minutes = Math.floor(this.time / 60)
+      const seconds = this.time - minutes * 60
+      const strSeconds = seconds.toString().padStart(2, '0')
+      const strMinutes = minutes.toString().padStart(2, '0')
+      this.text = `${strMinutes}:${strSeconds}`
+    }
+  }
 ])
+
+timer.time = MAX_GAME_TIME
+
+loop(1 ,() => {
+  timer.time -= 1
+  timer.update()
+})
 
 const backPrompt = add([
   pos(width() / 2, height() - 16),
