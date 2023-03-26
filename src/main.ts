@@ -12,7 +12,7 @@ const MAGE_SPEED = 100
 const ATTACK_SPEED = 300
 const SLIME_SIZE = 16
 const SLIME_SPEED = 20
-const SLIME_TIME_TO_INCREASE_AMOUNT = 20 // seconds
+const SLIME_TIME_TO_INCREASE_AMOUNT = 30 // seconds
 const CASTLE_SIZE = 56
 const MAX_GAME_TIME = 60 * 4 // seconds
 const UI_Z = 200
@@ -270,7 +270,7 @@ scene('main', () => {
     'slime',
   ]
   
-  let slimeSpawnDelay = 3
+  let slimeSpawnDelay = 1.5
   
   const spawnSlime = () => {
     add([
@@ -282,7 +282,7 @@ scene('main', () => {
   spawnSlime()
   
   loop(SLIME_TIME_TO_INCREASE_AMOUNT, () => {
-    slimeSpawnDelay = slimeSpawnDelay * 0.95
+    slimeSpawnDelay = slimeSpawnDelay * 0.8
   })
   
   onCollide('fireball', 'slime', (fireball, slime) => {
